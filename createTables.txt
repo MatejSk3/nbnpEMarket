@@ -1,0 +1,182 @@
+CREATE TABLE ACCOUNT
+(
+ id uuid DEFAULT uuid_generate_v4 (), 
+	Username varchar(50),
+  RegistrationDate DATE,
+  SSN Integer,
+  Name varchar(50),
+  Surname varchar(50),
+  TelephoneNumber varchar(11),
+	primary key(id)
+ );
+ 
+ 
+CREATE TABLE CUSTOMER
+(
+id uuid DEFAULT uuid_generate_v4 (),
+	Address VARCHAR(50),
+  Balance INTEGER,
+	primary key(id)
+);
+ 
+CREATE TABLE MEMBERSHIP
+(
+id uuid DEFAULT uuid_generate_v4 (),
+ CustomerID uuid  REFERENCES CUSTOMER(ID),
+ DiscountPercent INTEGER,
+DateFrom DATE,
+DateTo DATE,
+primary key(id)
+);
+ 
+CREATE TABLE EMPLOYEE
+(
+ id uuid DEFAULT uuid_generate_v4 (),
+ DeliveriesMade INTEGER,
+	primary key(id)
+);
+ 
+ CREATE TABLE COMPANY
+(
+  id uuid DEFAULT uuid_generate_v4 (),
+  ContactAccountID uuid REFERENCES ACCOUNT(ID),
+  CompanyName varchar(50),
+	primary key(id)
+);
+ 
+CREATE TABLE EMPLOYMENT
+(
+ id uuid DEFAULT uuid_generate_v4 (),
+ EmployeeID uuid REFERENCES EMPLOYEE(ID),
+ CompanyID uuid REFERENCES Company(ID),
+ StartDate DATE,
+ EndDate DATE,
+	primary key(id)
+ );
+ 
+ 
+CREATE TABLE VEHICLE
+(
+  id uuid DEFAULT uuid_generate_v4 (),
+  Type varchar(50),
+	primary key(id)
+);
+ 
+CREATE TABLE EmployeeVehicleAccess
+(
+  id uuid DEFAULT uuid_generate_v4 (),
+  EmployeeID uuid REFERENCES Employee(ID),
+  VehicleID uuid REFERENCES Vehicle(ID),
+	primary key(id)
+);
+ 
+ 
+ 
+CREATE TABLE Wishlist (
+  id uuid DEFAULT uuid_generate_v4 (),
+  CustomerID uuid  REFERENCES Customer(ID),
+	primary key(id)
+);
+ 
+CREATE TABLE Seller(
+  id uuid DEFAULT uuid_generate_v4 (),
+  Columns varchar(50),
+	primary key(id)
+);
+ 
+CREATE TABLE ProductCategory(
+ id uuid DEFAULT uuid_generate_v4 (),
+  Name varchar(50),
+  ParentCategoryID uuid REFERENCES ProductCategory(id),
+	primary key(id)
+);
+ 
+ 
+CREATE TABLE Product(
+  id uuid DEFAULT uuid_generate_v4 (),
+  CategoryID uuid REFERENCES ProductCategory(id),
+  SellerID uuid REFERENCES Seller(ID),
+  Name Varchar(50),
+	primary key(id)
+	);
+ 
+CREATE TABLE WishlistRecord (
+  id uuid DEFAULT uuid_generate_v4 (),
+  WihlistID uuid REFERENCES Wishlist(ID),
+  ProductID uuid REFERENCES Product(id),
+	primary key(id)
+);
+ 
+CREATE TABLE Coupons(
+  id uuid DEFAULT uuid_generate_v4 (),
+  activatedBy uuid REFERENCES Customer(ID),
+  Code Integer,
+  isUsed Varchar(50),
+  usedOn Date,
+	primary key(id)
+);
+ 
+ 
+ 
+ 
+CREATE TABLE Cart(
+  id uuid DEFAULT uuid_generate_v4 (),
+  TotalPrice Integer,
+  CustomerID uuid REFERENCES Customer(ID),
+  Status varchar(50),
+	primary key(id)
+);
+ 
+CREATE TABLE OrderItem(
+ id uuid DEFAULT uuid_generate_v4 (),
+	CartID uuid REFERENCES Cart(id),
+  CustomerID uuid REFERENCES Customer(ID),
+  EmployeeID uuid REFERENCES Employee(ID),
+  ProductID uuid REFERENCES Product(id),
+  CouponID uuid REFERENCES Coupons(ID),
+  Quantity Integer,
+  TotalPrice Integer,
+  ProductPrice Integer,
+  DiscountPercantage Integer,
+	primary key(id)
+);
+ 
+CREATE TABLE Delivery(
+  id uuid DEFAULT uuid_generate_v4 (),
+  OrderID uuid REFERENCES OrderItem(id),
+  CustomerID uuid REFERENCES Customer(ID),
+  EmployeeID uuid REFERENCES Employee(ID),
+  VehicleID uuid REFERENCES Vehicle(ID),
+  Status varchar(50),
+	primary key(id)
+);
+ 
+CREATE TABLE Price(
+  id uuid DEFAULT uuid_generate_v4 (),
+  ProductID uuid REFERENCES Product(id),
+  StartDate Date,
+  EndDate Date,
+  Price Integer,
+  Status Varchar(50),
+	primary key(id)
+);
+ 
+ 
+ 
+CREATE TABLE Transactions
+(
+  id uuid DEFAULT uuid_generate_v4 (),
+  OrderID uuid REFERENCES OrderItem(id),
+  CustomerID uuid REFERENCES Customer(ID),
+  Amount INTEGER,
+  Method Varchar(50),
+  DiscountPercent INTEGER,
+	primary key(id)
+);
+ 
+CREATE TABLE Product_OrderItem(
+	id uuid DEFAULT uuid_generate_v4 (),
+	ProductID uuid REFERENCES Product(id),
+  OrderID uuid REFERENCES OrderItem(id),
+	primary key(id)
+);
